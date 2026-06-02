@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Development Guide - Group 34</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+  <style>
+    /* Base styling and CSS variables expected by the component */
+    :root {
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f8fafc;
+      
+      --color-text-primary: #0f172a;
+      --color-text-secondary: #64748b;
+      
+      --color-border-secondary: #cbd5e1;
+      --color-border-tertiary: #e2e8f0;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+      background-color: #f1f5f9;
+      font-family: var(--font-sans);
+    }
+
+    #root {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: var(--color-background-primary);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Scrollbar styling for code blocks */
+    pre::-webkit-scrollbar {
+      height: 8px;
+    }
+    pre::-webkit-scrollbar-track {
+      background: var(--color-background-primary);
+      border-radius: 4px;
+    }
+    pre::-webkit-scrollbar-thumb {
+      background: var(--color-border-secondary);
+      border-radius: 4px;
+    }
+  </style>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const phases = [
+      {
+        id: 1,
+        icon: "ti-books",
+        title: "Phase 1 — Setup & Tools",
+        color: "#185FA5",
+        bg: "#E6F1FB",
+        steps: [
+          {
+            title: "Install Required Tools",
+            time: "1–2 days",
+            desc: "Install everything you need before writing any code.",
+            commands: [
+              { label: "Node.js (for React)", cmd: "https://nodejs.org  →  Download LTS version and install" },
+              { label: "Python 3.11+", cmd: "https://python.org  →  Download and install" },
+              { label: "Docker Desktop", cmd: "https://docker.com/products/docker-desktop  →  Download and install" },
+              { label: "VS Code (code editor)", cmd: "https://code.visualstudio.com  →  Download and install" },
+              { label: "Git (version control)", cmd: "https://git-scm.com  →  Download and install" },
+            ],
+            note: "After installing Node.js, open a terminal and type: node --version   If you see a version number, it worked!"
+          },
+          {
+            title: "Create Project Folder Structure",
+            time: "30 min",
+            desc: "Organize your project into these folders from the start.",
+            code: `my-project/
+├── frontend/          ← React app lives here
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── App.jsx
+│   └── package.json
+├── backend/           ← Python FastAPI lives here
+│   ├── main.py
+│   ├── models/
+│   ├── routes/
+│   └── requirements.txt
+├── ai-models/         ← Machine learning code
+│   ├── anomaly_detection.py
+│   ├── log_analysis.py
+│   └── datasets/
+├── docker/            ← Docker config files
+│   ├── docker-compose.yml
+│   └── Dockerfile
+└── README.md`,
+            note: "Create these folders manually or run: mkdir -p my-project/frontend my-project/backend my-project/ai-models my-project/docker"
+          },
+          {
+            title: "Set Up GitHub Repository",
+            time: "30 min",
+            desc: "Create a GitHub repo so all 5 team members can work together without overwriting each other's code.",
+            commands: [
+              { label: "Step 1 — Go to github.com and create a new repository", cmd: "Name it: telemetry-rca-microservices" },
+              { label: "Step 2 — Clone it to your computer", cmd: "git clone https://github.com/YOUR_USERNAME/telemetry-rca-microservices.git" },
+              { label: "Step 3 — Each member creates their own branch", cmd: "git checkout -b feature/your-name-task" },
+              { label: "Step 4 — Push your work", cmd: "git add .  &&  git commit -m 'your message'  &&  git push" },
+            ],
+            note: "Rule: NEVER push directly to main branch. Always use a branch and create a Pull Request so teammates can review."
+          }
+        ]
+      },
+      {
+        id: 2,
+        icon: "ti-layout-dashboard",
+        title: "Phase 2 — Frontend (React Dashboard)",
+        color: "#0F6E56",
+        bg: "#E1F5EE",
+        steps: [
+          {
+            title: "Create the React App",
+            time: "1 day",
+            desc: "This creates your frontend project with all the basic files ready.",
+            commands: [
+              { label: "Open terminal, go into frontend folder", cmd: "cd my-project/frontend" },
+              { label: "Create React app", cmd: "npm create vite@latest . -- --template react" },
+              { label: "Install packages", cmd: "npm install" },
+              { label: "Install Tailwind CSS", cmd: "npm install tailwindcss @tailwindcss/vite" },
+              { label: "Install chart library (for graphs)", cmd: "npm install recharts" },
+              { label: "Install icon library", cmd: "npm install lucide-react" },
+              { label: "Start the app to test it", cmd: "npm run dev   →  Open http://localhost:5173" },
+            ],
+            note: "If you see a page in your browser saying 'Vite + React', your frontend is working!"
+          },
+          {
+            title: "Build These 5 Pages",
+            time: "1–2 weeks",
+            desc: "Your dashboard needs these 5 pages. Build them one by one.",
+            code: `Page 1: Dashboard (Home)
+━━━━━━━━━━━━━━━━━━━━━━━
+File: src/pages/Dashboard.jsx
+Shows: Total services, active alerts,
+       system health percentage, uptime
+
+Page 2: Services Monitor
+━━━━━━━━━━━━━━━━━━━━━━━
+File: src/pages/Services.jsx
+Shows: List of all microservices,
+       CPU %, memory %, status badge
+
+Page 3: Anomaly Alerts
+━━━━━━━━━━━━━━━━━━━━━━━
+File: src/pages/Alerts.jsx
+Shows: List of detected anomalies,
+       severity, time, which service
+
+Page 4: Root Cause Analysis
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+File: src/pages/RootCause.jsx
+Shows: Log analysis results,
+       AI explanation of the problem
+
+Page 5: System Settings
+━━━━━━━━━━━━━━━━━━━━━━━
+File: src/pages/Settings.jsx
+Shows: Configure thresholds,
+       user roles, notifications`,
+            note: "Start with Dashboard first. Make it look good, then copy the layout for other pages."
+          },
+          {
+            title: "Example: Dashboard Page Code",
+            time: "Reference",
+            desc: "Copy this starter code into src/pages/Dashboard.jsx and modify it.",
+            code: `import { useState, useEffect } from 'react'
+
+export default function Dashboard() {
+  const [metrics, setMetrics] = useState({
+    totalServices: 0,
+    healthyServices: 0,
+    alerts: 0,
+    uptime: 99.9
+  })
+
+  // Fetch data from your backend every 5 seconds
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch('http://localhost:8000/api/metrics')
+      const data = await res.json()
+      setMetrics(data)
+    }
+    fetchData()
+    const interval = setInterval(fetchData, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">System Overview</h1>
+      
+      {/* Summary Cards */}
+      <div className="grid grid-cols-4 gap-4 mb-8">
+        <StatCard label="Total Services" value={metrics.totalServices} />
+        <StatCard label="Healthy" value={metrics.healthyServices} color="green" />
+        <StatCard label="Active Alerts" value={metrics.alerts} color="red" />
+        <StatCard label="Uptime %" value={metrics.uptime} />
+      </div>
+    </div>
+  )
+}
+
+function StatCard({ label, value, color }) {
+  return (
+    <div className="bg-white border rounded-lg p-4">
+      <p className="text-gray-500 text-sm">{label}</p>
+      <p className="text-3xl font-bold mt-1">{value}</p>
+    </div>
+  )
+}`,
+            note: "The 'fetch' call connects your React frontend to your Python backend. Make sure the backend is running on port 8000."
+          }
+        ]
+      },
+      {
+        id: 3,
+        icon: "ti-server",
+        title: "Phase 3 — Backend (Python FastAPI)",
+        color: "#854F0B",
+        bg: "#FAEEDA",
+        steps: [
+          {
+            title: "Set Up FastAPI Backend",
+            time: "1–2 days",
+            desc: "FastAPI is your backend server. It receives requests from the React frontend and returns data.",
+            commands: [
+              { label: "Go into backend folder", cmd: "cd my-project/backend" },
+              { label: "Install Python packages", cmd: "pip install fastapi uvicorn sqlalchemy psycopg2-binary python-dotenv" },
+              { label: "Save the list of packages", cmd: "pip freeze > requirements.txt" },
+              { label: "Start the backend server", cmd: "uvicorn main:app --reload --port 8000" },
+              { label: "Test it in browser", cmd: "Open: http://localhost:8000/docs  (auto-generated API page!)" },
+            ],
+            note: "FastAPI automatically creates a documentation page at /docs — you can test all your APIs there without writing any code."
+          },
+          {
+            title: "Starter Backend Code (main.py)",
+            time: "Reference",
+            desc: "Create this file as backend/main.py — it's your starting point.",
+            code: `from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import random, time
+
+app = FastAPI(title="Microservices Monitor API")
+
+# Allow React frontend to call this API
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# GET /api/metrics  → Dashboard summary data
+@app.get("/api/metrics")
+def get_metrics():
+    return {
+        "totalServices": 12,
+        "healthyServices": 10,
+        "alerts": 2,
+        "uptime": 99.7
+    }
+
+# GET /api/services  → List of all services
+@app.get("/api/services")
+def get_services():
+    services = ["auth-service", "payment-service",
+                "user-service", "order-service"]
+    return [
+        {
+            "name": s,
+            "cpu": round(random.uniform(10, 90), 1),
+            "memory": round(random.uniform(20, 80), 1),
+            "status": "healthy" if random.random() > 0.2 else "warning",
+            "requests_per_sec": random.randint(50, 500)
+        }
+        for s in services
+    ]
+
+# GET /api/alerts  → Anomaly alerts
+@app.get("/api/alerts")
+def get_alerts():
+    return [
+        {
+            "id": 1,
+            "service": "payment-service",
+            "severity": "critical",
+            "message": "CPU spike detected: 95% usage",
+            "time": "2 minutes ago"
+        },
+        {
+            "id": 2,
+            "service": "auth-service",
+            "severity": "warning",
+            "message": "Response time increased to 3.2s",
+            "time": "15 minutes ago"
+        }
+    ]`,
+            note: "The CORS middleware is very important — without it, your React app cannot talk to your Python backend."
+          },
+          {
+            title: "Connect to PostgreSQL Database",
+            time: "1 day",
+            desc: "Store your telemetry data and alerts in a database so data persists.",
+            commands: [
+              { label: "Install PostgreSQL", cmd: "https://postgresql.org/download  →  Install for your OS" },
+              { label: "Create a database", cmd: "Open pgAdmin (installed with PostgreSQL) → Create database named: microservices_db" },
+              { label: "Create .env file in backend/", cmd: "DATABASE_URL=postgresql://postgres:password@localhost/microservices_db" },
+              { label: "Install SQLAlchemy (database library)", cmd: "pip install sqlalchemy" },
+            ],
+            code: `# backend/database.py
+from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import os
+from datetime import datetime
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(bind=engine)
+Base = declarative_base()
+
+# Table: stores anomaly alerts
+class Alert(Base):
+    __tablename__ = "alerts"
+    id = Column(Integer, primary_key=True)
+    service_name = Column(String)
+    severity = Column(String)
+    message = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+# Table: stores telemetry metrics
+class Metric(Base):
+    __tablename__ = "metrics"
+    id = Column(Integer, primary_key=True)
+    service_name = Column(String)
+    cpu_percent = Column(Float)
+    memory_percent = Column(Float)
+    response_time_ms = Column(Float)
+    recorded_at = Column(DateTime, default=datetime.utcnow)
+
+Base.metadata.create_all(engine)`,
+            note: "This code creates the database tables automatically when you run it. No need to write SQL manually."
+          }
+        ]
+      },
+      {
+        id: 4,
+        icon: "ti-brain",
+        title: "Phase 4 — AI Models",
+        color: "#993C1D",
+        bg: "#FAECE7",
+        steps: [
+          {
+            title: "Install AI/ML Libraries",
+            time: "1 day",
+            desc: "These Python libraries let you build the anomaly detection and log analysis models.",
+            commands: [
+              { label: "Go to ai-models folder", cmd: "cd my-project/ai-models" },
+              { label: "Install ML libraries", cmd: "pip install scikit-learn numpy pandas matplotlib" },
+              { label: "Install deep learning", cmd: "pip install tensorflow torch" },
+              { label: "Install NLP libraries", cmd: "pip install transformers langchain openai" },
+              { label: "Install data generation", cmd: "pip install faker" },
+            ],
+            note: "These downloads are large (1–3 GB). Use a good internet connection. Run this once and it will be saved on your computer."
+          },
+          {
+            title: "Anomaly Detection Model",
+            time: "1–2 weeks",
+            desc: "This model watches CPU, memory, and response time — and raises an alarm when something looks wrong.",
+            code: `# ai-models/anomaly_detection.py
+import numpy as np
+from sklearn.ensemble import IsolationForest
+import pandas as pd
+
+class AnomalyDetector:
+    def __init__(self):
+        # Isolation Forest works well for anomaly detection
+        # contamination=0.1 means "expect 10% of data to be anomalies"
+        self.model = IsolationForest(
+            contamination=0.1,
+            random_state=42
+        )
+        self.is_trained = False
+
+    def train(self, data):
+        """
+        data = list of dicts like:
+        [{"cpu": 45, "memory": 60, "response_ms": 120}, ...]
+        """
+        df = pd.DataFrame(data)
+        features = df[["cpu", "memory", "response_ms"]]
+        self.model.fit(features)
+        self.is_trained = True
+        print("Model trained successfully!")
+
+    def predict(self, cpu, memory, response_ms):
+        """
+        Returns: "normal" or "anomaly"
+        """
+        if not self.is_trained:
+            return "model_not_trained"
+        
+        X = [[cpu, memory, response_ms]]
+        result = self.model.predict(X)
+        
+        # IsolationForest returns -1 for anomaly, 1 for normal
+        return "anomaly" if result[0] == -1 else "normal"
+
+    def get_anomaly_score(self, cpu, memory, response_ms):
+        """Higher score = more abnormal"""
+        X = [[cpu, memory, response_ms]]
+        score = self.model.decision_function(X)
+        return float(score[0])
+
+
+# ── Test the model ──────────────────────────────────────
+if __name__ == "__main__":
+    detector = AnomalyDetector()
+    
+    # Generate fake normal training data
+    import random
+    normal_data = [
+        {"cpu": random.uniform(20, 60),
+         "memory": random.uniform(30, 70),
+         "response_ms": random.uniform(50, 200)}
+        for _ in range(1000)
+    ]
+    
+    detector.train(normal_data)
+    
+    # Test with normal values
+    print(detector.predict(45, 55, 120))   # → normal
+    
+    # Test with anomalous values  
+    print(detector.predict(95, 98, 5000))  # → anomaly`,
+            note: "Run this file directly first: python anomaly_detection.py — if it prints 'normal' then 'anomaly', it works!"
+          },
+          {
+            title: "NLP Log Analysis (Root Cause)",
+            time: "1–2 weeks",
+            desc: "This reads error logs and uses AI to explain what went wrong.",
+            code: `# ai-models/log_analysis.py
+from openai import OpenAI
+import os
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def analyze_logs(log_text: str) -> dict:
+    """
+    Send logs to AI and get root cause explanation.
+    
+    Input:  raw log text from microservices
+    Output: dict with root_cause, severity, recommendation
+    """
+    
+    prompt = f"""
+    You are an expert DevOps engineer analyzing microservice logs.
+    
+    Analyze the following system logs and identify:
+    1. The ROOT CAUSE of any errors or failures
+    2. The SEVERITY (critical / warning / info)
+    3. RECOMMENDED action to fix it
+    
+    Respond in JSON format only:
+    {{
+        "root_cause": "...",
+        "severity": "critical|warning|info",
+        "affected_service": "...",
+        "recommendation": "..."
+    }}
+    
+    LOGS TO ANALYZE:
+    {log_text}
+    """
+    
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        response_format={"type": "json_object"}
+    )
+    
+    import json
+    return json.loads(response.choices[0].message.content)
+
+
+# ── Test it ──────────────────────────────────────────────
+if __name__ == "__main__":
+    sample_logs = """
+    2024-01-15 14:23:01 ERROR payment-service: Database connection timeout after 30s
+    2024-01-15 14:23:02 ERROR payment-service: Failed to process payment for user 12345
+    2024-01-15 14:23:03 ERROR payment-service: Connection pool exhausted (max: 10)
+    2024-01-15 14:23:05 WARN  payment-service: Retrying connection attempt 1/3
+    """
+    
+    result = analyze_logs(sample_logs)
+    print(result)
+    # Expected output:
+    # {
+    #   "root_cause": "Database connection pool exhausted",
+    #   "severity": "critical",
+    #   "affected_service": "payment-service",
+    #   "recommendation": "Increase connection pool size or fix database bottleneck"
+    # }`,
+            note: "You need an OpenAI API key. Get one free at platform.openai.com. Add it to a .env file: OPENAI_API_KEY=sk-..."
+          }
+        ]
+      },
+      {
+        id: 5,
+        icon: "ti-brand-docker",
+        title: "Phase 5 — Docker & Kubernetes",
+        color: "#534AB7",
+        bg: "#EEEDFE",
+        steps: [
+          {
+            title: "Dockerize Your Application",
+            time: "3–5 days",
+            desc: "Docker packages your app so it runs the same way on any computer.",
+            code: `# docker/docker-compose.yml
+# This file starts ALL services with one command
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: microservices_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  # Python FastAPI Backend
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db/microservices_db
+    depends_on:
+      - db
+
+  # React Frontend
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  # Prometheus (collects metrics)
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # Grafana (shows graphs)
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus`,
+            commands: [
+              { label: "Start everything with ONE command", cmd: "docker compose up" },
+              { label: "Stop everything", cmd: "docker compose down" },
+              { label: "Rebuild after code changes", cmd: "docker compose up --build" },
+            ],
+            note: "After running 'docker compose up', visit: Frontend → localhost:3000 | Backend API → localhost:8000/docs | Grafana → localhost:3001"
+          },
+          {
+            title: "Kubernetes Setup (Minikube for local)",
+            time: "1 week",
+            desc: "Kubernetes manages your Docker containers automatically — scaling them up/down as needed.",
+            commands: [
+              { label: "Install Minikube (local Kubernetes)", cmd: "https://minikube.sigs.k8s.io/docs/start  →  Download and install" },
+              { label: "Install kubectl (Kubernetes tool)", cmd: "https://kubernetes.io/docs/tasks/tools  →  Download and install" },
+              { label: "Start Minikube", cmd: "minikube start" },
+              { label: "Deploy your backend", cmd: "kubectl apply -f docker/k8s-backend.yaml" },
+              { label: "Check if it's running", cmd: "kubectl get pods" },
+              { label: "See the dashboard", cmd: "minikube dashboard" },
+            ],
+            note: "Kubernetes is complex — focus on getting Docker working first. Add Kubernetes in the final month of development."
+          }
+        ]
+      },
+      {
+        id: 6,
+        icon: "ti-test-pipe",
+        title: "Phase 6 — Testing",
+        color: "#3B6D11",
+        bg: "#EAF3DE",
+        steps: [
+          {
+            title: "Test Your Backend APIs",
+            time: "Ongoing",
+            desc: "Write tests to make sure your APIs return the correct data.",
+            commands: [
+              { label: "Install test library", cmd: "pip install pytest httpx" },
+              { label: "Run all tests", cmd: "pytest backend/tests/ -v" },
+            ],
+            code: `# backend/tests/test_api.py
+import pytest
+from fastapi.testclient import TestClient
+from main import app
+
+client = TestClient(app)
+
+def test_metrics_endpoint():
+    """Test that /api/metrics returns expected fields"""
+    response = client.get("/api/metrics")
+    assert response.status_code == 200
+    data = response.json()
+    assert "totalServices" in data
+    assert "healthyServices" in data
+    assert "alerts" in data
+    assert "uptime" in data
+
+def test_services_endpoint():
+    """Test that /api/services returns a list"""
+    response = client.get("/api/services")
+    assert response.status_code == 200
+    services = response.json()
+    assert isinstance(services, list)
+    assert len(services) > 0
+    # Check each service has required fields
+    for s in services:
+        assert "name" in s
+        assert "cpu" in s
+        assert "status" in s
+
+def test_alerts_endpoint():
+    """Test that alerts have severity field"""
+    response = client.get("/api/alerts")
+    assert response.status_code == 200
+    alerts = response.json()
+    for alert in alerts:
+        assert alert["severity"] in ["critical", "warning", "info"]`,
+            note: "Run tests every time you finish a feature. If a test fails, fix the code before moving on."
+          },
+          {
+            title: "Test the AI Model Accuracy",
+            time: "1 week",
+            desc: "Measure how good your anomaly detection model is at catching real problems.",
+            code: `# ai-models/evaluate_model.py
+from anomaly_detection import AnomalyDetector
+from sklearn.metrics import classification_report
+import random
+
+def generate_test_data():
+    """Create fake data with known anomalies"""
+    normal = [
+        {"cpu": random.uniform(20, 60),
+         "memory": random.uniform(30, 70),
+         "response_ms": random.uniform(50, 300),
+         "label": "normal"}
+        for _ in range(900)
+    ]
+    anomalies = [
+        {"cpu": random.uniform(85, 100),
+         "memory": random.uniform(85, 100),
+         "response_ms": random.uniform(3000, 10000),
+         "label": "anomaly"}
+        for _ in range(100)
+    ]
+    return normal + anomalies
+
+# Train the model on 80% of data
+detector = AnomalyDetector()
+all_data = generate_test_data()
+random.shuffle(all_data)
+
+split = int(len(all_data) * 0.8)
+train_data = all_data[:split]
+test_data  = all_data[split:]
+
+detector.train(train_data)
+
+# Evaluate on remaining 20%
+true_labels = [d["label"] for d in test_data]
+pred_labels = [
+    detector.predict(d["cpu"], d["memory"], d["response_ms"])
+    for d in test_data
+]
+
+print(classification_report(true_labels, pred_labels))
+# Target: precision ≥ 0.80, recall ≥ 0.78, F1 ≥ 0.78`,
+            note: "Your project requires minimum 80% accuracy and F1-score ≥ 0.78. Run this evaluation and include the output in your final report."
+          }
+        ]
+      }
+    ];
+
+    const teamTasks = [
+      { member: "Hasitha / Bagya",   role: "Project Manager",     tasks: ["Create GitHub repo, set up Jira/Trello", "Docker Compose setup", "Backend API development", "Coordinate weekly meetings"], color: "#185FA5", bg: "#E6F1FB" },
+      { member: "Vishadi / Prasangika", role: "QA & DevOps",      tasks: ["Kubernetes setup (Minikube)", "Write pytest tests for all APIs", "Ethics documentation", "Set up CI/CD with GitHub Actions"], color: "#0F6E56", bg: "#E1F5EE" },
+      { member: "Bagya",             role: "Business Analyst",     tasks: ["Download & prepare datasets (LogHub, Google Cluster)", "Write requirements document", "Test data generation scripts", "User manual writing"], color: "#854F0B", bg: "#FAEEDA" },
+      { member: "Supun",             role: "Backend Lead",         tasks: ["FastAPI main.py setup", "PostgreSQL database models", "Connect AI models to API endpoints", "OpenAI API integration"], color: "#993C1D", bg: "#FAECE7" },
+      { member: "Prasangika / Hasitha", role: "Frontend Lead",    tasks: ["React app creation (Vite)", "All 5 dashboard pages", "Charts with Recharts library", "Mobile responsive design"], color: "#534AB7", bg: "#EEEDFE" },
+    ];
+
+    const timeline = [
+      { month: "July 2026",    phase: "Phase 1", task: "Install tools, GitHub setup, folder structure, literature review", done: false },
+      { month: "Aug 2026",     phase: "Phase 2", task: "System design, database schema, wireframes, tech stack finalized", done: false },
+      { month: "Sep 2026",     phase: "Phase 3", task: "Anomaly detection model training, dataset collection", done: false },
+      { month: "Oct–Nov 2026", phase: "Phase 3", task: "NLP log analysis model, failure prediction module", done: false },
+      { month: "Nov–Dec 2026", phase: "Phase 4", task: "React frontend (all pages), FastAPI backend (all routes)", done: false },
+      { month: "Dec 2026",     phase: "Phase 4", task: "Docker Compose working, Prometheus + Grafana integrated", done: false },
+      { month: "Jan 2027",     phase: "Phase 5", task: "Kubernetes setup, auto-scaling agents, self-healing logic", done: false },
+      { month: "Feb 2027",     phase: "Phase 6", task: "Full testing, model evaluation, ethics audit, bug fixes", done: false },
+      { month: "Mar 2027",     phase: "Final",   task: "Final report, presentation preparation, demo rehearsal", done: false },
+    ];
+
+    function DevGuide() {
+      const [activePhase, setActivePhase] = useState(0);
+      const [activeStep, setActiveStep]   = useState(0);
+      const [activeTab, setActiveTab]     = useState("guide");
+      const [checkedTasks, setCheckedTasks] = useState({});
+
+      const phase = phases[activePhase];
+      const step  = phase.steps[activeStep];
+
+      const toggleTask = (key) => setCheckedTasks(p => ({ ...p, [key]: !p[key] }));
+
+      const totalTasks = phases.reduce((sum, ph) => sum + ph.steps.length, 0);
+      const done = Object.values(checkedTasks).filter(Boolean).length;
+
+      return (
+        <div style={{ color: "var(--color-text-primary)", padding: "1rem 0" }}>
+          <h2 className="sr-only" style={{display: 'none'}}>Complete Development Guide for Final Year Project — Group 34</h2>
+
+          {/* Header */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <p style={{ fontSize: 13, color: "var(--color-text-secondary)", marginBottom: 4 }}>EEY6689 — Group 34 — Open University of Sri Lanka</p>
+            <h2 style={{ fontSize: 22, fontWeight: 500, margin: "0 0 4px" }}>Complete Development Guide</h2>
+            <p style={{ fontSize: 14, color: "var(--color-text-secondary)", margin: 0 }}>Step-by-step: how to build Telemetry-Driven RCA & Decentralized Agentic Resource Scaling</p>
+          </div>
+
+          {/* Progress bar */}
+          <div style={{ background: "var(--color-background-secondary)", borderRadius: 8, padding: "12px 16px", marginBottom: "1.5rem", border: "1px solid var(--color-border-tertiary)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+              <span style={{ fontSize: 13, fontWeight: 500 }}>Your progress</span>
+              <span style={{ fontSize: 13, color: "var(--color-text-secondary)" }}>{done} of {totalTasks} steps checked</span>
+            </div>
+            <div style={{ height: 6, background: "var(--color-border-tertiary)", borderRadius: 4, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${(done / totalTasks) * 100}%`, background: "#185FA5", borderRadius: 4, transition: "width 0.3s" }} />
+            </div>
+          </div>
+
+          {/* Tab nav */}
+          <div style={{ display: "flex", gap: 4, marginBottom: "1.5rem", borderBottom: "1px solid var(--color-border-tertiary)", paddingBottom: 0 }}>
+            {[
+              { id: "guide",    label: "Step-by-step guide", icon: "ti-list-check" },
+              { id: "team",     label: "Team task split",     icon: "ti-users" },
+              { id: "timeline", label: "Project timeline",    icon: "ti-calendar" },
+            ].map(tab => (
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+                padding: "8px 16px", fontSize: 13, fontWeight: activeTab === tab.id ? 500 : 400,
+                background: "transparent", border: "none", cursor: "pointer",
+                borderBottom: activeTab === tab.id ? "2px solid #185FA5" : "2px solid transparent",
+                color: activeTab === tab.id ? "#185FA5" : "var(--color-text-secondary)",
+                marginBottom: -1
+              }}>
+                <i className={`ti ${tab.icon}`} aria-hidden="true" style={{ marginRight: 6 }} />{tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* ── GUIDE TAB ── */}
+          {activeTab === "guide" && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16, '@media (min-width: 768px)': { gridTemplateColumns: "220px 1fr"} }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+                
+                {/* Phase sidebar */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: "220px" }}>
+                  {phases.map((ph, i) => (
+                    <button key={ph.id} onClick={() => { setActivePhase(i); setActiveStep(0); }} style={{
+                      textAlign: "left", padding: "10px 12px",
+                      background: activePhase === i ? ph.bg : "transparent",
+                      border: `1px solid ${activePhase === i ? ph.color : "var(--color-border-tertiary)"}`,
+                      borderRadius: 8, cursor: "pointer", transition: "all 0.15s"
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <i className={`ti ${ph.icon}`} style={{ fontSize: 16, color: ph.color }} aria-hidden="true" />
+                        <span style={{ fontSize: 12, fontWeight: 500, color: activePhase === i ? ph.color : "var(--color-text-primary)", lineHeight: 1.3 }}>{ph.title}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Step content */}
+                <div style={{ flex: 1, minWidth: "300px" }}>
+                  {/* Step tabs */}
+                  <div style={{ display: "flex", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+                    {phase.steps.map((s, i) => (
+                      <button key={i} onClick={() => setActiveStep(i)} style={{
+                        padding: "6px 12px", fontSize: 12, borderRadius: 20,
+                        background: activeStep === i ? phase.color : "var(--color-background-secondary)",
+                        color: activeStep === i ? "#fff" : "var(--color-text-secondary)",
+                        border: `1px solid ${activeStep === i ? phase.color : "var(--color-border-tertiary)"}`,
+                        cursor: "pointer", fontWeight: activeStep === i ? 500 : 400
+                      }}>
+                        Step {i + 1}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Step card */}
+                  <div style={{ background: "var(--color-background-primary)", border: "1px solid var(--color-border-tertiary)", borderRadius: 12, padding: "1.25rem", marginBottom: 12 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+                      <h3 style={{ fontSize: 16, fontWeight: 500, margin: 0 }}>{step.title}</h3>
+                      <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 20, background: phase.bg, color: phase.color, fontWeight: 500, whiteSpace: "nowrap", marginLeft: 12 }}>
+                        ⏱ {step.time}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 14, color: "var(--color-text-secondary)", marginBottom: 16, lineHeight: 1.6 }}>{step.desc}</p>
+
+                    {step.commands && (
+                      <div style={{ marginBottom: 16 }}>
+                        <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 8, color: "var(--color-text-secondary)" }}>COMMANDS / ACTIONS</p>
+                        {step.commands.map((c, i) => (
+                          <div key={i} style={{ marginBottom: 8 }}>
+                            <p style={{ fontSize: 12, color: "var(--color-text-secondary)", margin: "0 0 2px" }}>{c.label}</p>
+                            <div style={{ background: "var(--color-background-secondary)", borderRadius: 6, padding: "8px 12px", border: "1px solid var(--color-border-tertiary)" }}>
+                              <code style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--color-text-primary)" }}>{c.cmd}</code>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {step.code && (
+                      <div style={{ marginBottom: 16 }}>
+                        <p style={{ fontSize: 12, fontWeight: 500, marginBottom: 8, color: "var(--color-text-secondary)" }}>CODE</p>
+                        <div style={{ background: "var(--color-background-secondary)", borderRadius: 8, padding: "1rem", border: "1px solid var(--color-border-tertiary)", overflowX: "auto" }}>
+                          <pre style={{ margin: 0, fontSize: 11.5, fontFamily: "var(--font-mono)", color: "var(--color-text-primary)", whiteSpace: "pre", lineHeight: 1.6 }}>{step.code}</pre>
+                        </div>
+                      </div>
+                    )}
+
+                    {step.note && (
+                      <div style={{ background: "#E6F1FB", borderRadius: 8, padding: "10px 14px", borderLeft: "3px solid #185FA5" }}>
+                        <p style={{ fontSize: 13, color: "#185FA5", margin: 0, lineHeight: 1.5 }}>
+                          <i className="ti ti-info-circle" style={{ marginRight: 6 }} aria-hidden="true" />
+                          {step.note}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Mark done */}
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 13, color: "var(--color-text-secondary)" }}>
+                    <input type="checkbox"
+                      checked={!!checkedTasks[`${activePhase}-${activeStep}`]}
+                      onChange={() => toggleTask(`${activePhase}-${activeStep}`)}
+                      style={{ width: 16, height: 16 }}
+                    />
+                    Mark this step as completed
+                  </label>
+
+                  {/* Navigation */}
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
+                    <button onClick={() => {
+                      if (activeStep > 0) setActiveStep(s => s - 1);
+                      else if (activePhase > 0) { setActivePhase(p => p - 1); setActiveStep(phases[activePhase - 1].steps.length - 1); }
+                    }} style={{ padding: "8px 16px", fontSize: 13, borderRadius: 8, border: "1px solid var(--color-border-secondary)", background: "transparent", cursor: "pointer" }}>
+                      <i className="ti ti-arrow-left" aria-hidden="true" style={{ marginRight: 6 }} />Previous
+                    </button>
+                    <button onClick={() => {
+                      if (activeStep < phase.steps.length - 1) setActiveStep(s => s + 1);
+                      else if (activePhase < phases.length - 1) { setActivePhase(p => p + 1); setActiveStep(0); }
+                    }} style={{ padding: "8px 16px", fontSize: 13, borderRadius: 8, border: "1px solid var(--color-border-secondary)", background: "transparent", cursor: "pointer" }}>
+                      Next<i className="ti ti-arrow-right" aria-hidden="true" style={{ marginLeft: 6 }} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── TEAM TAB ── */}
+          {activeTab === "team" && (
+            <div>
+              <p style={{ fontSize: 14, color: "var(--color-text-secondary)", marginBottom: 16 }}>Who does what in your group. Discuss with your team and adjust as needed.</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 12 }}>
+                {teamTasks.map((t, i) => (
+                  <div key={i} style={{ background: "var(--color-background-primary)", border: "1px solid var(--color-border-tertiary)", borderRadius: 12, padding: "1rem 1.25rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                      <div style={{ width: 36, height: 36, borderRadius: "50%", background: t.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <i className="ti ti-user" style={{ fontSize: 18, color: t.color }} aria-hidden="true" />
+                      </div>
+                      <div>
+                        <p style={{ fontWeight: 500, fontSize: 14, margin: 0 }}>{t.member}</p>
+                        <p style={{ fontSize: 12, color: t.color, margin: 0 }}>{t.role}</p>
+                      </div>
+                    </div>
+                    <div style={{ borderTop: "1px solid var(--color-border-tertiary)", paddingTop: 10 }}>
+                      {t.tasks.map((task, j) => (
+                        <div key={j} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+                          <i className="ti ti-point-filled" style={{ fontSize: 12, color: t.color, marginTop: 4, flexShrink: 0 }} aria-hidden="true" />
+                          <p style={{ fontSize: 13, margin: 0, lineHeight: 1.5, color: "var(--color-text-primary)" }}>{task}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 16, background: "#FAEEDA", borderRadius: 8, padding: "12px 16px", borderLeft: "3px solid #854F0B" }}>
+                <p style={{ fontSize: 13, color: "#854F0B", margin: 0 }}>
+                  <i className="ti ti-bulb" aria-hidden="true" style={{ marginRight: 6 }} />
+                  Team tip: Hold a 30-minute meeting every Monday. Each person shares: what they did last week, what they will do this week, and any blockers. Use Slack for daily communication.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* ── TIMELINE TAB ── */}
+          {activeTab === "timeline" && (
+            <div>
+              <p style={{ fontSize: 14, color: "var(--color-text-secondary)", marginBottom: 16 }}>Check off each milestone as you complete it.</p>
+              {timeline.map((item, i) => {
+                const key = `tl-${i}`;
+                const checked = !!checkedTasks[key];
+                return (
+                  <div key={i} onClick={() => toggleTask(key)} style={{
+                    display: "flex", gap: 12, padding: "12px 14px",
+                    marginBottom: 6, borderRadius: 8, cursor: "pointer",
+                    background: checked ? "#EAF3DE" : "var(--color-background-primary)",
+                    border: `1px solid ${checked ? "#639922" : "var(--color-border-tertiary)"}`,
+                    transition: "all 0.15s"
+                  }}>
+                    <div style={{
+                      width: 20, height: 20, borderRadius: "50%", flexShrink: 0,
+                      background: checked ? "#639922" : "var(--color-background-secondary)",
+                      border: `1px solid ${checked ? "#639922" : "var(--color-border-secondary)"}`,
+                      display: "flex", alignItems: "center", justifyContent: "center", marginTop: 2
+                    }}>
+                      {checked && <i className="ti ti-check" style={{ fontSize: 12, color: "#fff" }} aria-hidden="true" />}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 2 }}>
+                        <span style={{ fontSize: 12, fontWeight: 500, color: "#185FA5", background: "#E6F1FB", padding: "1px 8px", borderRadius: 4 }}>{item.phase}</span>
+                        <span style={{ fontSize: 12, color: "var(--color-text-secondary)" }}>{item.month}</span>
+                      </div>
+                      <p style={{ fontSize: 13, margin: 0, color: checked ? "#3B6D11" : "var(--color-text-primary)", lineHeight: 1.5 }}>{item.task}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<DevGuide />);
+  </script>
+</body>
+</html>
